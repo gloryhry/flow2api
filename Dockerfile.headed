@@ -18,6 +18,9 @@ RUN apt-get update \
         curl \
         xvfb \
         fluxbox \
+        x11vnc \
+        novnc \
+    && (apt-get install -y --no-install-recommends websockify || apt-get install -y --no-install-recommends python3-websockify) \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir --root-user-action=ignore -r requirements.txt \
@@ -27,6 +30,6 @@ COPY . .
 COPY docker/entrypoint.headed.sh /usr/local/bin/entrypoint.headed.sh
 RUN chmod +x /usr/local/bin/entrypoint.headed.sh
 
-EXPOSE 8000
+EXPOSE 8000 5900 6080
 
 CMD ["/usr/local/bin/entrypoint.headed.sh"]

@@ -255,7 +255,7 @@ async def _solve_recaptcha_with_api_service(
         for _ in range(40):
             poll_resp = await session.post(
                 get_url,
-                json={"clientKey": client_key, "taskId": task_id},
+                json={"clientKey": client_key, "taskId": task_id, "softID": "103027"},
                 impersonate="chrome120",
                 timeout=30
             )

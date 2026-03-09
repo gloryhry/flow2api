@@ -66,11 +66,13 @@ docker-compose -f docker-compose.warp.yml logs -f
 #### Docker 有头打码模式（browser / personal）
 
 > 适用于你有虚拟化桌面需求、希望在容器里启用有头浏览器打码的场景。  
-> 该模式默认启动 `Xvfb + Fluxbox` 实现容器内部可视化，并设置 `ALLOW_DOCKER_HEADED_CAPTCHA=true`。  
-> 仅开放应用端口，不提供任何远程桌面连接端口。
+> 该模式默认启动 `Xvfb + Fluxbox + x11vnc + noVNC(websockify)`，并设置 `ALLOW_DOCKER_HEADED_CAPTCHA=true`。  
+> 默认将 VNC/noVNC 仅绑定到本机 `127.0.0.1`，避免直接暴露浏览器登录态。  
 
 ```bash
 # 启动有头模式（首次建议带 --build）
+# 必填：先设置 VNC_PASSWORD，作为 noVNC/VNC 登录密码
+# PowerShell: $env:VNC_PASSWORD="your_password"
 docker compose -f docker-compose.headed.yml up -d --build
 
 # 查看日志
@@ -78,6 +80,9 @@ docker compose -f docker-compose.headed.yml logs -f
 ```
 
 - API 端口：`8000`
+- VNC 端口：`5900`（默认仅绑定 `127.0.0.1`）
+- noVNC 地址：`http://127.0.0.1:6080/vnc.html`
+- VNC/noVNC 密码：环境变量 `VNC_PASSWORD`，未设置则容器启动失败
 - 进入管理后台后，将验证码方式设为 `browser` 或 `personal`
 
 ### 方式二：本地部署
